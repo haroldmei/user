@@ -1,9 +1,9 @@
-NAME = weaveworksdemos/user
-DBNAME = weaveworksdemos/user-db
+NAME = haroldmei/user
+DBNAME = haroldmei/user-db
 INSTANCE = user
 TESTDB = weaveworkstestuserdb
 OPENAPI = $(INSTANCE)-testopenapi
-GROUP = weaveworksdemos
+GROUP = haroldmei
 
 TAG=$(TRAVIS_COMMIT)
 
@@ -70,7 +70,7 @@ mockservice:
 dockertest: dockerruntest
 	scripts/testcontainer.sh
 	docker run -h openapi --rm --name $(OPENAPI) --link user-dev -v $(PWD)/apispec/:/tmp/specs/\
-		weaveworksdemos/openapi /tmp/specs/$(INSTANCE).json\
+		haroldmei/openapi /tmp/specs/$(INSTANCE).json\
 		http://$(INSTANCE)-dev:8084/\
 		-f /tmp/specs/hooks.js
 	 $(MAKE) cleandocker

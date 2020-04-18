@@ -70,7 +70,7 @@ mockservice:
 dockertest: dockerruntest
 	scripts/testcontainer.sh
 	docker run -h openapi --rm --name $(OPENAPI) --link user-dev -v $(PWD)/apispec/:/tmp/specs/\
-		haroldmei/openapi /tmp/specs/$(INSTANCE).json\
+		weaveworksdemos/openapi /tmp/specs/$(INSTANCE).json\
 		http://$(INSTANCE)-dev:8084/\
 		-f /tmp/specs/hooks.js
 	 $(MAKE) cleandocker

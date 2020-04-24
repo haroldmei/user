@@ -1,14 +1,20 @@
-NAME = haroldmei/user
-DBNAME = haroldmei/user-db
 INSTANCE = user
 TESTDB = weaveworkstestuserdb
 OPENAPI = $(INSTANCE)-testopenapi
+
 GROUP = haroldmei
+
+NAME = $(GROUP)/user
+DBNAME = $(GROUP)/user-db
+
+REGISTRY=k8smaster:5000/
+TAG_DBG=latest
+NAME_DBG = $(REGISTRY)$(GROUP)/user
+DBNAME_DBG = $(REGISTRY)$(GROUP)/user-db
 
 TAG=$(TRAVIS_COMMIT)
 
 default: docker
-
 
 pre: 
 	go get -v github.com/Masterminds/glide
@@ -57,6 +63,16 @@ dockerlocal:
 dockertravisbuild: 
 	docker build -t $(NAME):$(TAG) -f docker/user/Dockerfile-release .
 	docker build -t $(DBNAME):$(TAG) -f docker/user-db/Dockerfile docker/user-db/
+	if [ -z "$(DOCKER_PASS)" ]; then \
+		echo "This is a build triggered by an external PR. Skipping docker push."; \
+	else \
+		docker login -u $(DOCKER_USER) -p $(DOCKER_PASS); \
+		scripts/push.sh; \
+	fi
+
+build: 
+	docker build -t $(NAME_DBG):$(TAG_DBG) -f docker/user/Dockerfile-release .
+	docker build -t $(DBNAME_DBG):$(TAG_DBG) -f docker/user-db/Dockerfile docker/user-db/
 	if [ -z "$(DOCKER_PASS)" ]; then \
 		echo "This is a build triggered by an external PR. Skipping docker push."; \
 	else \
